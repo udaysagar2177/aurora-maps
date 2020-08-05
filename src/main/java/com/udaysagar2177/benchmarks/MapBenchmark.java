@@ -7,7 +7,6 @@ import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -32,17 +31,26 @@ import net.openhft.chronicle.values.Values;
 /**
  * Benchmarks for {@link OffHeapMap} impls in comparison to Koloboke & Chronicle maps.
  *
+ * Benchmark                              Mode  Cnt         Score         Error  Units
+ * MapBenchmark.testGetOnChronicleMap    thrpt   10   7658662.823 ±  391085.881  ops/s
+ * MapBenchmark.testGetOnKolobokeMap     thrpt   10  19729611.919 ± 1112444.077  ops/s
+ * MapBenchmark.testGetOnMmapOffHeapMap  thrpt   10  14932054.535 ± 1148252.476  ops/s
+ * MapBenchmark.testGetOnOffHeapMap      thrpt   10  17817330.026 ± 1974688.265  ops/s
+ * MapBenchmark.testPutOnChronicleMap    thrpt   10         1.633 ±       0.022  ops/s
+ * MapBenchmark.testPutOnKolobokeMap     thrpt   10        19.164 ±       1.837  ops/s
+ * MapBenchmark.testPutOnMmapOffHeapMap  thrpt   10        14.356 ±       2.228  ops/s
+ * MapBenchmark.testPutOnOffHeapMap      thrpt   10        13.197 ±       0.826  ops/s
+ *
  * @author uday
  */
 @State(Scope.Thread)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @Fork(1)
-@Warmup(iterations = 20, time = 2000, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 20, time = 2000, timeUnit = TimeUnit.MILLISECONDS)
+@Warmup(iterations = 10, time = 2000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 10, time = 2000, timeUnit = TimeUnit.MILLISECONDS)
 public class MapBenchmark {
 
-    private int SIZE = 100000; // 100K
+    private int SIZE = 1_000_000;
 
     private IntIntMap intIntMap;
     private ChronicleMap<IntValue, IntValue> chronicleMap;
@@ -77,26 +85,22 @@ public class MapBenchmark {
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public int testGetOnKolobokeMap() {
         return intIntMap.get(RandomUtils.randInt(Integer.MAX_VALUE));
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public IntValue testGetOnChronicleMap() {
         key.setValue(RandomUtils.randInt(Integer.MAX_VALUE));
         return chronicleMap.getUsing(key, value);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public IntHolder testGetOnOffHeapMap() {
         return benchmarkGetOnOffHeapMap(offHeapMap);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public IntHolder testGetOnMmapOffHeapMap() {
         return benchmarkGetOnOffHeapMap(mmapOffHeapMap);
     }
@@ -109,7 +113,7 @@ public class MapBenchmark {
     @Benchmark
     public int testPutOnKolobokeMap() {
         intIntMap.clear();
-        int size = SIZE * 2;
+        int size = SIZE;
         for (int i = 0; i < size; i++) {
             int random = RandomUtils.randInt(Integer.MAX_VALUE);
             intIntMap.put(random, random);
@@ -142,9 +146,9 @@ public class MapBenchmark {
 
     private IntHolder benchmarkPutOnOffHeapMap(OffHeapMap<IntHolder, IntHolder> offHeapMap) {
         offHeapMap.clear();
-        int size = SIZE * 2;
+        int size = SIZE;
         for (int i = 0; i < size; i++) {
-            int random = 1 + RandomUtils.randInt(100000000);
+            int random = RandomUtils.randInt(100000000);
             keyHolder.setInt(random);
             valueHolder.setInt(random);
             offHeapMap.put(keyHolder, valueHolder, null);
@@ -153,11 +157,9 @@ public class MapBenchmark {
         return offHeapMap.get(keyHolder, valueHolder);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         MapBenchmark mapBenchmark = new MapBenchmark();
         mapBenchmark.setup();
-        mapBenchmark.testPutOnOffHeapMap();
-        mapBenchmark.testPutOnOffHeapMap();
         mapBenchmark.testPutOnOffHeapMap();
     }
 

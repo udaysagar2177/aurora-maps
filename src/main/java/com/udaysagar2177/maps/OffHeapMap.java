@@ -2,7 +2,7 @@ package com.udaysagar2177.maps;
 
 import java.util.Map;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface for {@link Map} like implementations that store key-values off-heap and provide high
@@ -33,8 +33,8 @@ public interface OffHeapMap<K, V> extends AutoCloseable {
      * @param value
      *         value to be associated with the specified key
      * @param previousValueHolder
-     *         a variable to hold previous value associated with key before this update. If {@code
-     *         null}, the old value is not collected
+     *         a variable to hold previous value associated with key before this update. If
+     *         {@code null} is supplied, the old value is not collected
      * @return the previous value associated with key or {@code null} if there was no mapping for
      * the given key.
      */
@@ -58,12 +58,15 @@ public interface OffHeapMap<K, V> extends AutoCloseable {
      *
      * @param key
      *         key whose mapping is to be removed from the map
-     * @return the previous value associated with key or {@code null} if there was no mapping for
-     * key,
+     * @param usingValue
+     *         a variable to hold previous value associated with key before this update. If
+     *         {@code null} is supplied, the old value is not collected
+     * @return the previous value associated with key if value flyweight is provided. Returns
+     *         {@code null} if value flyweight is null or if there was no mapping for key.
      * @throws UnsupportedOperationException
      *         if remove operation is not supported by this map
      */
-    V remove(@NotNull K key);
+    V remove(@NotNull K key, V usingValue);
 
     /**
      * Returns the number of key-value mappings in this map.

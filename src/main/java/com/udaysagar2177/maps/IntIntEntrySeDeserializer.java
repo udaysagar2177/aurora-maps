@@ -15,6 +15,7 @@ public class IntIntEntrySeDeserializer implements EntrySeDeserializer<IntHolder,
     private static final int FREE_KEY = 0;
     private static final int KEY_OFFSET = 0;
     private static final int VALUE_OFFSET = 4;
+    private static final int ENTRY_LENGTH = Integer.BYTES * 2;
 
     @Override
     public boolean isFreeKey(IntHolder key) {
@@ -23,7 +24,7 @@ public class IntIntEntrySeDeserializer implements EntrySeDeserializer<IntHolder,
 
     @Override
     public int numBytesPerEntry() {
-        return Integer.BYTES * 2;
+        return ENTRY_LENGTH;
     }
 
     @Override
@@ -38,9 +39,6 @@ public class IntIntEntrySeDeserializer implements EntrySeDeserializer<IntHolder,
 
     @Override
     public void write(long entryAddress, IntHolder key, IntHolder value) {
-        if (key.getInt() < 0) {
-            throw new IllegalStateException(String.format("Invalid key %s", key.getInt()));
-        }
         OS.memory().writeInt(entryAddress + VALUE_OFFSET, value.getInt());
         OS.memory().writeInt(entryAddress + KEY_OFFSET, key.getInt());
     }
@@ -64,5 +62,10 @@ public class IntIntEntrySeDeserializer implements EntrySeDeserializer<IntHolder,
     @Override
     public boolean equalsKey(long entryAddress, IntHolder key) {
         return OS.memory().readInt(entryAddress + KEY_OFFSET) == key.getInt();
+    }
+
+    @Override
+    public void copy(long fromAddress, long toAddress) {
+        OS.memory().copyMemory(fromAddress, toAddress, ENTRY_LENGTH);
     }
 }

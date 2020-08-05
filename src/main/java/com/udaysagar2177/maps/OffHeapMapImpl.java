@@ -100,7 +100,7 @@ public class OffHeapMapImpl<K extends Copyable<K>, V extends Copyable<V>>
             return null;
         }
         int position = getPosition(entrySeDeserializer.hash(key));
-        for (int i = 0; i < hashTableSize; i++) {
+        do {
             long address = getAddress(position); // TODO: simplify address calc
             if (entrySeDeserializer.equalsKey(address, key)) {
                 if (previousValueHolder != null) {
@@ -118,8 +118,7 @@ public class OffHeapMapImpl<K extends Copyable<K>, V extends Copyable<V>>
                 return null;
             }
             position = (position + 1) & modulo;
-        }
-        throw new IllegalStateException(String.format("Unexpected state reached for key %s", key));
+        } while (true);
     }
 
     @Override
@@ -128,7 +127,7 @@ public class OffHeapMapImpl<K extends Copyable<K>, V extends Copyable<V>>
             return hasFreeKey ? freeValue : null;
         }
         int position = getPosition(entrySeDeserializer.hash(key));
-        for (int i = 0; i < hashTableSize; i++) {
+        do {
             long address = getAddress(position);
             if (entrySeDeserializer.equalsKey(address, key)) {
                 entrySeDeserializer.readValue(address, usingValue);
@@ -138,14 +137,72 @@ public class OffHeapMapImpl<K extends Copyable<K>, V extends Copyable<V>>
                 return null;
             }
             position = (position + 1) & modulo;
-        }
-        throw new IllegalStateException(String.format("Unexpected state reached for key %s", key));
+        } while (true);
     }
 
     @Override
-    public V remove(K key) {
-        // TODO: implement me
-        return null;
+    public V remove(K key, V usingValue) {
+        if (entrySeDeserializer.isFreeKey(key)) {
+            if (hasFreeKey) {
+                size--;
+                hasFreeKey = false;
+                if (usingValue != null) {
+                    usingValue.copyFrom(freeValue);
+                    return usingValue;
+                }
+            }
+            return null;
+        }
+        int position = getPosition(entrySeDeserializer.hash(key));
+        do {
+            long address = getAddress(position);
+            if (entrySeDeserializer.equalsKey(address, key)) {
+                if (usingValue != null) {
+                    entrySeDeserializer.readValue(address, usingValue);
+                }
+                shiftKeys(position);
+                size--;
+                return usingValue;
+            }
+            if (entrySeDeserializer.isEmpty(address)) {
+                return null;
+            }
+            position = (position + 1) & modulo;
+        } while (true);
+    }
+
+    private void shiftKeys(int currentPosition) {
+        int freeSlot;
+        long freeSlotAddress;
+        int currentKeySlot;
+        long currentAddress;
+        K key = keyFactory.get();
+        do {
+            freeSlot = currentPosition;
+            freeSlotAddress = getAddress(freeSlot);
+            currentPosition = (currentPosition + 1) & modulo;
+            currentAddress = getAddress(currentPosition);
+            while (true) {
+                if (entrySeDeserializer.isEmpty(currentAddress)) {
+                    entrySeDeserializer.clear(freeSlotAddress);
+                    return;
+                }
+                entrySeDeserializer.readKey(currentAddress, key);
+                currentKeySlot = entrySeDeserializer.hash(key);
+                if (freeSlot <= currentPosition) {
+                    if (freeSlot >= currentKeySlot || currentKeySlot > currentPosition) {
+                        break;
+                    }
+                } else {
+                    if (currentPosition < currentKeySlot && currentKeySlot <= freeSlot) {
+                        break;
+                    }
+                }
+                currentPosition = (currentPosition + 1) & modulo;
+                currentAddress = getAddress(currentPosition);
+            }
+            entrySeDeserializer.copy(currentAddress, freeSlotAddress);
+        } while (true);
     }
 
     @Override
@@ -236,7 +293,7 @@ public class OffHeapMapImpl<K extends Copyable<K>, V extends Copyable<V>>
         while (requiredMemory > 0) {
             int capacity = (int) Math.min(requiredMemory, MAX_MEMORY_RESOURCE_CAPACITY);
             newResources.add(memoryResourceFactory.apply(capacity));
-            requiredMemory -= MAX_MEMORY_RESOURCE_CAPACITY;
+            requiredMemory -= capacity;
         }
         return newResources;
     }

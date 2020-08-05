@@ -1,5 +1,7 @@
 package com.udaysagar2177.maps;
 
+import java.util.Objects;
+
 /**
  * Alternative to auto-boxing that converts a primitive int into an object.
  *
@@ -26,5 +28,20 @@ public class IntHolder implements Copyable<IntHolder> {
     @Override
     public void copyFrom(IntHolder from) {
         this.intValue = from.getInt();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        IntHolder intHolder = (IntHolder) o;
+        return intValue == intHolder.intValue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(intValue);
     }
 }

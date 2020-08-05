@@ -81,4 +81,12 @@ public interface EntrySeDeserializer<K, V> {
      * @return true if the key at the given address is equal to given key.
      */
     boolean equalsKey(long entryAddress, K key);
+
+    /**
+     * Copies the entry data from one address to another address.
+     *
+     * @param fromAddress address to copy the entry data from
+     * @param toAddress address to copy the entry data to
+     */
+    void copy(long fromAddress, long toAddress);
 }
