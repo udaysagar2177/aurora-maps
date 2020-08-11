@@ -1,4 +1,6 @@
-package com.udaysagar2177.maps;
+package com.udaysagar2177.maps.sedeserializers;
+
+import com.udaysagar2177.maps.OffHeapMap;
 
 /**
  * Interface that allows serialization and deserialization of key-value data onto memory.

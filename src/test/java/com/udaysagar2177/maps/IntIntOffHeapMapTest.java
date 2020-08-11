@@ -10,8 +10,10 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.udaysagar2177.maps.memory.DirectMemoryResource;
+import com.udaysagar2177.maps.sedeserializers.IntHolder;
+import com.udaysagar2177.maps.sedeserializers.IntIntEntrySeDeserializer;
 
-public class OffHeapMapTest {
+public class IntIntOffHeapMapTest {
 
     private static final Random RANDOM = new Random();
 

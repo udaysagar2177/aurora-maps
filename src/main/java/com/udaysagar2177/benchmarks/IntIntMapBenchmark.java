@@ -15,8 +15,8 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import com.koloboke.collect.map.IntIntMap;
 import com.koloboke.collect.map.hash.HashIntIntMaps;
-import com.udaysagar2177.maps.IntHolder;
-import com.udaysagar2177.maps.IntIntEntrySeDeserializer;
+import com.udaysagar2177.maps.sedeserializers.IntHolder;
+import com.udaysagar2177.maps.sedeserializers.IntIntEntrySeDeserializer;
 import com.udaysagar2177.maps.OffHeapMap;
 import com.udaysagar2177.maps.OffHeapMapImpl;
 import com.udaysagar2177.maps.memory.DirectMemoryResource;
@@ -32,14 +32,14 @@ import net.openhft.chronicle.values.Values;
  * Benchmarks for {@link OffHeapMap} impls in comparison to Koloboke & Chronicle maps.
  *
  * Benchmark                              Mode  Cnt         Score         Error  Units
- * MapBenchmark.testGetOnChronicleMap    thrpt   10   7658662.823 ±  391085.881  ops/s
- * MapBenchmark.testGetOnKolobokeMap     thrpt   10  19729611.919 ± 1112444.077  ops/s
- * MapBenchmark.testGetOnMmapOffHeapMap  thrpt   10  14932054.535 ± 1148252.476  ops/s
- * MapBenchmark.testGetOnOffHeapMap      thrpt   10  17817330.026 ± 1974688.265  ops/s
- * MapBenchmark.testPutOnChronicleMap    thrpt   10         1.633 ±       0.022  ops/s
- * MapBenchmark.testPutOnKolobokeMap     thrpt   10        19.164 ±       1.837  ops/s
- * MapBenchmark.testPutOnMmapOffHeapMap  thrpt   10        14.356 ±       2.228  ops/s
- * MapBenchmark.testPutOnOffHeapMap      thrpt   10        13.197 ±       0.826  ops/s
+ * IntIntMapBenchmark.testGetOnChronicleMap    thrpt  100   9749814.908 ±  226087.135  ops/s
+ * IntIntMapBenchmark.testGetOnKolobokeMap     thrpt  100  24617367.499 ±  878137.939  ops/s
+ * IntIntMapBenchmark.testGetOnMmapOffHeapMap  thrpt  100  20850211.560 ± 1047023.575  ops/s
+ * IntIntMapBenchmark.testGetOnOffHeapMap      thrpt  100  19598000.585 ±  714347.341  ops/s
+ * IntIntMapBenchmark.testPutOnChronicleMap    thrpt  100         1.633 ±       0.035  ops/s
+ * IntIntMapBenchmark.testPutOnKolobokeMap     thrpt  100        24.604 ±       0.895  ops/s
+ * IntIntMapBenchmark.testPutOnMmapOffHeapMap  thrpt  100        15.996 ±       0.601  ops/s
+ * IntIntMapBenchmark.testPutOnOffHeapMap      thrpt  100        16.791 ±       0.618  ops/s
  *
  * @author uday
  */
@@ -48,7 +48,7 @@ import net.openhft.chronicle.values.Values;
 @Fork(1)
 @Warmup(iterations = 10, time = 2000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 10, time = 2000, timeUnit = TimeUnit.MILLISECONDS)
-public class MapBenchmark {
+public class IntIntMapBenchmark {
 
     private int SIZE = 1_000_000;
 
@@ -158,7 +158,7 @@ public class MapBenchmark {
     }
 
     public static void main(String[] args) {
-        MapBenchmark mapBenchmark = new MapBenchmark();
+        IntIntMapBenchmark mapBenchmark = new IntIntMapBenchmark();
         mapBenchmark.setup();
         mapBenchmark.testPutOnOffHeapMap();
     }

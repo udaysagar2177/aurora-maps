@@ -1,4 +1,4 @@
-package com.udaysagar2177.maps;
+package com.udaysagar2177.maps.sedeserializers;
 
 import com.udaysagar2177.maps.utils.MapUtils;
 
@@ -14,7 +14,7 @@ public class IntIntEntrySeDeserializer implements EntrySeDeserializer<IntHolder,
 
     private static final int FREE_KEY = 0;
     private static final int KEY_OFFSET = 0;
-    private static final int VALUE_OFFSET = 4;
+    private static final int VALUE_OFFSET = Integer.BYTES;
     private static final int ENTRY_LENGTH = Integer.BYTES * 2;
 
     @Override
@@ -55,8 +55,8 @@ public class IntIntEntrySeDeserializer implements EntrySeDeserializer<IntHolder,
 
     @Override
     public void clear(long entryAddress) {
-        OS.memory().writeInt(entryAddress + VALUE_OFFSET, 0);
         OS.memory().writeInt(entryAddress + KEY_OFFSET, 0);
+        OS.memory().writeInt(entryAddress + VALUE_OFFSET, 0);
     }
 
     @Override
