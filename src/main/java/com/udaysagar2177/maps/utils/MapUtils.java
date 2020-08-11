@@ -18,6 +18,14 @@ public class MapUtils {
     }
 
     /**
+     * Returns hash value of given long.
+     */
+    public static int phiMix(long x) {
+        long h = x * 0x9E3779B9; // phiMix(x) taken from FastUtil;
+        return (int) (h ^ (h >> 16));
+    }
+
+    /**
      * Computes the least power of two larger than or equal to <code>Math.ceil( expected / f )</code>.
      *
      * @param expectedSize
