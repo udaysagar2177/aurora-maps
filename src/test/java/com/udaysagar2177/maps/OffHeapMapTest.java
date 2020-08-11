@@ -75,11 +75,12 @@ public class OffHeapMapTest {
 
     @Test
     public void testPutGetsWithRandomData() throws Exception {
-        int numElements = 10000;
+        int numElements = 100000;
         OffHeapMapImpl<IntHolder, IntHolder> map = new OffHeapMapImpl<>(numElements, 0.66f,
                 new IntIntEntrySeDeserializer(), DirectMemoryResource::new,
                 IntHolder::new, IntHolder::new);
         IntHolder key = new IntHolder();
+        IntHolder removeKey = new IntHolder();
         IntHolder value = new IntHolder();
         IntHolder valueFlyweight = new IntHolder();
         Map<Integer, Integer> hashMap = new HashMap<>();
@@ -91,12 +92,13 @@ public class OffHeapMapTest {
                     int randInt = RANDOM.nextInt(100000000);
                     key.setInt(randInt);
                     value.setInt(randInt * 2);
-                    if (RANDOM.nextInt(10) < 3) {
-                        Integer removedValue = hashMap.remove(key.getInt());
-                        IntHolder removedValueHolder = map.remove(key, valueFlyweight);
+                    if (RANDOM.nextInt(10) < 2) {
+                        Integer removedValue = hashMap.remove(removeKey.getInt());
+                        IntHolder removedValueHolder = map.remove(removeKey, valueFlyweight);
                         if (removedValue != null) {
                             assertEquals((int) removedValue, removedValueHolder.getInt());
                         }
+                        removeKey.copyFrom(key); // copy next key for deletion next time
                     }
                     Integer previousValue = hashMap.put(key.getInt(), value.getInt());
                     IntHolder previousValueHolder = map.put(key, value, valueFlyweight);

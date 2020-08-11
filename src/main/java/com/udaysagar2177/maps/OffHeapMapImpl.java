@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.udaysagar2177.maps.memory.MemoryResource;
+import com.udaysagar2177.maps.sedeserializers.EntrySeDeserializer;
 import com.udaysagar2177.maps.utils.MapUtils;
 
 /**
@@ -188,7 +189,7 @@ public class OffHeapMapImpl<K extends Copyable<K>, V extends Copyable<V>>
                     return;
                 }
                 entrySeDeserializer.readKey(currentAddress, key);
-                currentKeySlot = entrySeDeserializer.hash(key);
+                currentKeySlot = getPosition(entrySeDeserializer.hash(key));
                 if (freeSlot <= currentPosition) {
                     if (freeSlot >= currentKeySlot || currentKeySlot > currentPosition) {
                         break;
