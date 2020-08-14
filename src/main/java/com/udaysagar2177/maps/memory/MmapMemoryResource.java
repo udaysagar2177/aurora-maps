@@ -14,7 +14,9 @@ import sun.nio.ch.DirectBuffer;
 /**
  * An {@link MemoryResource} implementation that allocates memory by memory-mapping a file.
  *
- * The file used for memory-mapping is deleted and then recreated before use.
+ * The file used for memory-mapping is deleted and then re-created before use. All new files used
+ * by this resource have an increasing file index in the file name to avoid conflicts between two
+ * or more map objects using this resource type.
  *
  * @author uday
  */
@@ -30,8 +32,12 @@ public class MmapMemoryResource implements MemoryResource {
     private final int capacityInBytes;
 
     public MmapMemoryResource(String dataFolderPath, int capacityInBytes) {
+        this(dataFolderPath, "offHeapMap", capacityInBytes);
+    }
+
+    public MmapMemoryResource(String dataFolderPath, String filePrefix, int capacityInBytes) {
         this.capacityInBytes = capacityInBytes;
-        this.file = new File(String.format("%s/%d.dat", dataFolderPath,
+        this.file = new File(String.format("%s/%s_%d.dat", dataFolderPath, filePrefix,
                 nextFileIndex.getAndIncrement()));
         try {
             if (file.exists()) {
