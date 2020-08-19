@@ -4,58 +4,100 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.udaysagar2177</groupId>
-  <artifactId>offheap-maps</artifactId>
+  <groupId>io.github.udaysagar2177</groupId>
+  <artifactId>aurora-maps</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>offheap-maps</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <name>Java off-heap maps</name>
+  <description>Fastest off-heap maps for non-concurrent use cases</description>
+  <url>https://github.com/udaysagar2177/aurora-maps</url>
+
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Uday Sagar Shiramshetty</name>
+      <properties>
+        <github>@udaysagar2177</github>
+      </properties>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/udaysagar2177/aurora-maps.git</url>
+    <connection>scm:https://github.com/udaysagar2177/aurora-maps.git</connection>
+  </scm>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/udaysagar2177/aurora-maps/issues</url>
+  </issueManagement>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+
+    <koloboke.version>1.0.0</koloboke.version>
+    <chronicle-map.version>3.17.3</chronicle-map.version>
+    <chronicle-bytes.version>2.19.5</chronicle-bytes.version>
+    <jmh.version>1.23</jmh.version>
+    <junit.version>4.11</junit.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>net.openhft</groupId>
       <artifactId>chronicle-bytes</artifactId>
-      <version>2.19.5</version>
+      <version>${chronicle-bytes.version}</version>
     </dependency>
     <dependency>
       <groupId>com.koloboke</groupId>
       <artifactId>koloboke-api-jdk8</artifactId>
-      <version>1.0.0</version>
+      <version>${koloboke.version}</version>
     </dependency>
     <dependency>
       <groupId>com.koloboke</groupId>
       <artifactId>koloboke-impl-jdk8</artifactId>
-      <version>1.0.0</version>
+      <version>${koloboke.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>net.openhft</groupId>
       <artifactId>chronicle-map</artifactId>
-      <version>3.17.3</version>
+      <version>${chronicle-map.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>1.23</version>
+      <version>${jmh.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-generator-annprocess</artifactId>
       <scope>provided</scope>
-      <version>1.23</version>
+      <version>${jmh.version}</version>
     </dependency>
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
