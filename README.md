@@ -11,7 +11,18 @@ maps. To keep it simple, only fixed size key-values are supported. If you need s
 variable size key-values, extra effort must be taken to store the data of variable size at some
 other location and use the indices to that data in these maps.
 
-### Usage examples:
+### Quick start:
+Add the following dependency in your Maven `pom.xml`:
+```
+<dependency>
+  <groupId>io.github.udaysagar2177</groupId>
+  <artifactId>aurora-maps</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+Then, you can initialize and use a new off-heap map as shown below.
+
+#### Example:
 
 ```java
 public class IntIntMapExample {
@@ -101,10 +112,13 @@ ByteArrByteArrBenchmark.testPutOnMmapOffHeapMap  thrpt   60        0.856 ±    0
 ByteArrByteArrBenchmark.testPutOnOffHeapMap      thrpt   60        0.984 ±    0.001  ops/s
 ```
 
+Integer key-value maps are 10x faster than ChronicleMap on puts and 2x on gets. But byte array key-value maps are performing same as 
+ChronicleMap, that needs to be investigated and improved.
+
 TODO:
-1. Investigate and Improve performance of offheap-maps compared to koloboke maps
-2. Add append-only map, i.e., a map that doesn't support removal and key-value overrides for
-specific single writer multiple reader use cases
+1. More performance improvements
+2. Add append-only map wrapper, i.e., a map that doesn't support removal and key-value overrides for
+ single writer multiple readers use case
 3. Move chronicle map dependency to benchmarks folder
 
 Thanks to https://github.com/mikvor/hashmapTest & https://github.com/OpenHFT/Chronicle-Map for
