@@ -29,7 +29,7 @@ import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.values.Values;
 
 /**
- * Benchmarks for {@link OffHeapMap} impls in comparison to Koloboke & Chronicle maps.
+ * Benchmarks for {@link OffHeapMap} impls in comparison to Koloboke and Chronicle maps.
  *
  * Benchmark                              Mode  Cnt         Score         Error  Units
  * IntIntMapBenchmark.testGetOnChronicleMap    thrpt  100   9749814.908 ±  226087.135  ops/s

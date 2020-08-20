@@ -5,7 +5,7 @@ import java.util.Arrays;
 import io.github.udaysagar2177.maps.Copyable;
 
 /**
- * Wrapper around byte[] that implements {@link Copyable<ByteArrHolder>}.
+ * Wrapper around byte[].
  *
  * @author uday
  */

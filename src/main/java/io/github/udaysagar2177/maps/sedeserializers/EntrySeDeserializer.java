@@ -23,7 +23,7 @@ public interface EntrySeDeserializer<K, V> {
     boolean isFreeKey(K key);
 
     /**
-     * Returns the no. of bytes used per key-value entry.
+     * @return the no. of bytes used per key-value entry.
      */
     int numBytesPerEntry();
 

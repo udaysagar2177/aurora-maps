@@ -10,7 +10,10 @@ public class MapUtils {
     private MapUtils() { /* do nothing. */ }
 
     /**
-     * Returns hash value of given integer.
+     * Fast hash function, taken from FastUtil library.
+     *
+     * @param x value to be hashed
+     * @return hash value of given integer.
      */
     public static int phiMix(int x) {
         int h = x * 0x9E3779B9; // phiMix(x) taken from FastUtil;
@@ -18,7 +21,10 @@ public class MapUtils {
     }
 
     /**
-     * Returns hash value of given long.
+     * Fast hash function, taken from FastUtil library.
+     *
+     * @param x value to be hashed
+     * @return hash value of given long.
      */
     public static int phiMix(long x) {
         long h = x * 0x9E3779B9; // phiMix(x) taken from FastUtil;

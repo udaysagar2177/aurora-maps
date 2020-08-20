@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+
 import io.github.udaysagar2177.maps.memory.MemoryResource;
 import io.github.udaysagar2177.maps.sedeserializers.EntrySeDeserializer;
 import io.github.udaysagar2177.maps.utils.MapUtils;
@@ -15,11 +16,12 @@ import io.github.udaysagar2177.maps.utils.MapUtils;
  * fast, simple and allows CPU to exploit spatial locality on off-heap data.
  *
  * The data structure used to store key-values is a list of off-heap {@link MemoryResource}
- * allocated w.r.t to {@link this#MAX_MEMORY_RESOURCE_CAPACITY} and {@link this#numBytesPerEntry}.
- * This list acts as an abstraction to contiguous Hash Table. Positions in the Hash Table are
- * translated to an index in the list and then an internal index inside each {@link MemoryResource}.
- * During rehashing operations, new {@link MemoryResource}s are allocated to support bigger Hash
- * Table size and old {@link MemoryResource}s are released immediately.
+ * allocated w.r.t to {@link OffHeapMapImpl#MAX_MEMORY_RESOURCE_CAPACITY} and
+ * {@link OffHeapMapImpl#numBytesPerEntry}. This list acts as an abstraction to contiguous
+ * Hash Table. Positions in the Hash Table are translated to an index in the list and then an
+ * internal index inside each {@link MemoryResource}. During rehashing operations,
+ * new {@link MemoryResource}s are allocated to support bigger Hash Table size and
+ * old {@link MemoryResource}s are released immediately.
  *
  * It is a required condition that provided {@link MemoryResource} and {@link EntrySeDeserializer}
  * should be compatible in determining {@link EntrySeDeserializer#isEmpty(long)} and {@link

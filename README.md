@@ -1,4 +1,4 @@
-# offheap-maps
+# aurora-maps
 
 
 The goal of this repository is to create fastest off-heap maps in Java for non-concurrent use

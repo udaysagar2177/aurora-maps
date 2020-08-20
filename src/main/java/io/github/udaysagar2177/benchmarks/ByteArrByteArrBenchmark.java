@@ -28,7 +28,7 @@ import net.openhft.chronicle.map.ChronicleMap;
 
 /**
  * Benchamrks for {@link OffHeapMap} impls that uses byte[] as key and values, in comparison to
- * Koloboke & Chronicle maps.
+ * Koloboke and Chronicle maps.
  *
  * @author uday
  */
